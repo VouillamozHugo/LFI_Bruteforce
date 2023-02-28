@@ -1,11 +1,10 @@
 # LFI_Bruteforce
-* DISCLAIMER, for the moment the code may only work where lFI occure on a blank page, if they are other content
-	      on the page it may not works. 
-
 Python script to brute force LFI exploit with a given wordlist of file to test. 
 The script will replace the LFI part of the url with all line present in the wordlist. 
 The output can be displayed in the console or inside an output file using the -o options 
 
+If the webpage has other content than the LFI output it will be remove by the script to only display 
+the content of the file trigger by the LFI exploit 
 
 
 REQUIRED ARGUMENTS :
