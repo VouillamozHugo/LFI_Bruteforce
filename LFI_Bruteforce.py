@@ -11,6 +11,10 @@ def vrfy_args():
         print("Unable to open the file " + args.list)
         sys.exit()
 
+    if not 'LFI' in args.url:
+        print("The url should contain 'LFI', which is the part you want to replace with each line of the wordlist\nExample : http://localhost/page?file=LFI")
+        sys.exit()
+
 def exploit_LFI():
     url = args.url
     f = open(args.list)
