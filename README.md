@@ -13,7 +13,8 @@ python LFI_Bruteforce.py -w /usr/share/wordlist/LFI_List -u http://localhost/pag
 
 
 options:
-  -h, --help                   show this help message and exit
-  -w LIST, --wordlist LIST     Wordlist containing files to test with LFI (example: /etc/passwd)
-  -u URL, --url URL            The path to the LFI exploit example: http://localhost?file=LFI
-  -o DEST, --outfile DEST      Output file to write all informations found
+
+ -h, --help                   show this help message and exit
+ -w LIST, --wordlist LIST     Wordlist containing files to test with LFI (example: /etc/passwd)
+ -u URL, --url URL            The path to the LFI exploit example: http://localhost?file=LFI
+ -o DEST, --outfile DEST      Output file to write all informations found
