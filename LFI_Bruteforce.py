@@ -11,14 +11,6 @@ def vrfy_args():
         print("Unable to open the file " + args.list)
         sys.exit()
 
-
-    if args.dest is not None:
-        try:
-            open(args.dest)
-        except Exception as e:
-            print("Unable to open the file " + args.dest)
-            sys.exit()
-
 def exploit_LFI():
     url = args.url
     f = open(args.list)
