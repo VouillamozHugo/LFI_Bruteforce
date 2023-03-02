@@ -40,7 +40,7 @@ def exploit_LFI():
         content = page.read()
         if len(content) != default_size:
             total_true +=1
-            if default_size is not 0:
+            if default_size != 0:
                 final_content = clean_output(content.decode("utf-8"),default_page.decode("utf-8"))
             else:
                 final_content = content.decode("utf-8")
