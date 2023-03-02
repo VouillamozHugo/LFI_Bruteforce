@@ -17,13 +17,15 @@ REQUIRED ARGUMENTS :
 
 OPTIONS :
 
- -h, --help                   show this help message and exit
+ -h, --help                   		show this help message and exit
  
- -w LIST, --wordlist LIST     Wordlist containing files to test with LFI (example: /etc/passwd)
+ -w LIST, --wordlist LIST     		Wordlist containing files to test with LFI (example: /etc/passwd)
  
- -u URL, --url URL            The path to the LFI exploit example: http://localhost?file=LFI
+ -u URL, --url URL            		The path to the LFI exploit example: http://localhost?file=LFI
  
- -o DEST, --outfile DEST      Output file to write all informations found
+ -f                    	      		Used to filter out all commented line find in a file
+ 
+ -o DEST, --outfile DEST      		Output file to write all informations found
 
 
 EXAMPLE : 
