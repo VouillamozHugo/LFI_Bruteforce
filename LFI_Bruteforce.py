@@ -35,10 +35,10 @@ def exploit_LFI():
             else:
                 final_content = content.decode("utf-8")
             if args.dest == None:
-                print("#########################\nResult for => " + line + "#########################" + final_content )
+                print("#########################\nResult for => " + line + "#########################\n\n" + final_content )
             else:
                 with open(args.dest, 'a') as f:
-                    f.write("#########################\nResult for => " + line + "#########################" + final_content)
+                    f.write("#########################\nResult for => " + line + "#########################\n\n" + final_content)
                     f.close()
 
 
@@ -52,6 +52,7 @@ def clean_output(content,default_page):
         if not line == "":
             new_content += line + "\n"
 
+    new_content += "\n"
     return new_content
 
 
