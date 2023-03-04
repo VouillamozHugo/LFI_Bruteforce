@@ -23,8 +23,7 @@ def exploit_LFI():
     start = time.time()
     total_length = 0
     total_true = 0
-
-    ## Check the default page size when nothing came out of the LFI
+    
     random = "VQ328FEBWUBFI32BUI3BBF"
     URL = args.url.replace('LFI', random)
     page = urlopen(URL)
