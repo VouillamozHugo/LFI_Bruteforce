@@ -57,7 +57,6 @@ def exploit_LFI():
     final_info_print(total_length,total_true,duration)
 
 def clean_output(content,default_page):
-    ## function to only keep the LFI result and remove the value that are part of the website
     for line in default_page.splitlines():
         content = content.replace(line, '')
 
